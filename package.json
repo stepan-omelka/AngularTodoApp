@@ -31,6 +31,7 @@
     "@angular/material": "^20.2.12",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@firebase/firestore": "^4.9.2",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",

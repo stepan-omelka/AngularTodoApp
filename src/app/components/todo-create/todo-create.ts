@@ -6,6 +6,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
+import {TodoService} from '../../services/todo';
+import {Todo} from '../../models/todo.model';
 
 @Component({
   selector: 'app-todo-create',
@@ -16,6 +18,7 @@ import {MatButton} from '@angular/material/button';
 export class TodoCreate {
   private readonly _bottomSheetRef =
     inject<MatBottomSheetRef<TodoCreate>>(MatBottomSheetRef);
+  private readonly todoService = inject(TodoService);
 
   todoForm!: FormGroup;
 
@@ -36,9 +39,12 @@ export class TodoCreate {
       return;
     }
 
-    console.warn(this.todoForm.value)
-    // post data to firestore
-
+    const newTodo: Omit<Todo, 'id'> = {
+      ...this.todoForm.value,
+      completed: false,
+    };
+    
+    this.todoService.createItem(newTodo);
     this._bottomSheetRef.dismiss();
   }
 

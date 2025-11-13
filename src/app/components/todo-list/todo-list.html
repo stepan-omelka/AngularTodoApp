@@ -3,8 +3,9 @@
     <mat-icon>done_all</mat-icon>
     To-Do App
   </h1>
+  @if (todoList$ | async; as todoList) {
   <div class="todo-list-container mat-elevation-z3 p-3">
-    @for (todo of todoList; track todo.title) {
+    @for (todo of todoList; track todo.id) {
       <div class="todo-item-container mat-elevation-z2 p-2 d-flex gap-2 mb-2">
         @if (todo.completed) {
           <mat-icon class="text-primary" role="button" (click)="markAsIncompleted(todo)">check_circle</mat-icon>
@@ -38,9 +39,8 @@
       </div>
     }
   </div>
-
+  }
   <button matFab class="text-bg-primary add-button" (click)="openAddBottomSheet()">
     <mat-icon>add</mat-icon>
   </button>
 </div>
-
