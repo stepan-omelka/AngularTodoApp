@@ -1,14 +1,14 @@
 import {inject, Injectable} from '@angular/core';
+import {toSignal} from "@angular/core/rxjs-interop";
 import {
   addDoc,
   collection,
   collectionData,
   deleteDoc,
   doc,
-  docData,
   Firestore,
   updateDoc,
-  Timestamp // Import Timestamp directly from @angular/fire/firestore
+  Timestamp
 } from '@angular/fire/firestore';
 import {map, Observable} from 'rxjs';
 import {Todo} from "../models/todo.model";
@@ -21,27 +21,19 @@ export class TodoService {
 
   private readonly firestore = inject(Firestore);
 
-  async createItem(data: Omit<Todo, 'id'>): Promise<void> {
-    const itemCollection = collection(this.firestore, this.collectionName);
-    await addDoc(itemCollection, data);
-  }
-
-  getItems(): Observable<Todo[]> {
-    const itemsCollection = collection(this.firestore, this.collectionName);
-    return collectionData(itemsCollection, { idField: 'id' }).pipe(
+  private todos$: Observable<Todo[]> = collectionData(collection(this.firestore, this.collectionName), { idField: 'id' }).pipe(
       map((items) =>
         items.map((item) => {
           return this.convertTimestampToDate(item);
         })
       ),
     ) as Observable<Todo[]>;
-  }
 
-  getItemById(id: string): Observable<Todo> {
-    const itemDoc = doc(this.firestore, this.collectionName + '/' + id);
-    return docData(itemDoc, { idField: 'id' }).pipe(
-      map(item => this.convertTimestampToDate(item))
-    ) as Observable<Todo>;
+  public todos = toSignal(this.todos$, {initialValue: []});
+
+  async createItem(data: Omit<Todo, 'id'>): Promise<void> {
+    const itemCollection = collection(this.firestore, this.collectionName);
+    await addDoc(itemCollection, data);
   }
 
   async updateItem(id: string,  data: Partial<Todo>): Promise<void> {

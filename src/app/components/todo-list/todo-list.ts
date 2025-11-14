@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {Todo} from '../../models/todo.model';
 import {MatIconModule} from '@angular/material/icon';
-import {AsyncPipe, DatePipe, NgClass} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatBottomSheet, MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -10,7 +10,7 @@ import {TodoService} from '../../services/todo';
 
 @Component({
   selector: 'app-todo-list',
-  imports: [MatIconModule, DatePipe, MatButtonModule, NgClass, MatChipsModule, MatBottomSheetModule, AsyncPipe],
+  imports: [MatIconModule, DatePipe, MatButtonModule, NgClass, MatChipsModule, MatBottomSheetModule],
   templateUrl: './todo-list.html',
   styleUrl: './todo-list.css',
 })
@@ -18,7 +18,7 @@ export class TodoList {
   private readonly _bottomSheet = inject(MatBottomSheet);
   private readonly todoService = inject(TodoService);
 
-  readonly todoList$ = this.todoService.getItems();
+  readonly todoList = this.todoService.todos;
 
   markAsCompleted(item: Todo) {
     item.completed = true;
@@ -41,6 +41,6 @@ export class TodoList {
   }
 
   openAddBottomSheet() {
-    const bottomSheetRef = this._bottomSheet.open(TodoCreate);
+    this._bottomSheet.open(TodoCreate);
   }
 }

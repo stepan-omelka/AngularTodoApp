@@ -3,33 +3,40 @@
     <mat-icon>done_all</mat-icon>
     To-Do App
   </h1>
-  @if (todoList$ | async; as todoList) {
   <div class="todo-list-container mat-elevation-z3 p-3">
-    @for (todo of todoList; track todo.id) {
+    @for (todo of todoList(); track todo.id) {
       <div class="todo-item-container mat-elevation-z2 p-2 d-flex gap-2 mb-2">
-        @if (todo.completed) {
-          <mat-icon class="text-primary" role="button" (click)="markAsIncompleted(todo)">check_circle</mat-icon>
-        } @else {
-          <mat-icon role="button" (click)="markAsCompleted(todo)">radio_button_unchecked</mat-icon>
-        }
+        <div>
+          @if (todo.completed) {
+            <mat-icon class="text-primary" role="button" (click)="markAsIncompleted(todo)">check_circle</mat-icon>
+          } @else {
+            <mat-icon role="button" (click)="markAsCompleted(todo)">radio_button_unchecked</mat-icon>
+          }
+        </div>
         <div>
           <p class="mb-1 fw-bold" [ngClass]="{'completed-todo': todo.completed}">
             {{todo.title}}
           </p>
           <div>
-            <small>
-              Due: {{todo.dueDate | date:'medium'}}
-              Priority: <span
-              class="badge rounded-pill"
-              [ngClass]="{
+            <small class="d-flex flex-wrap">
+              <span class="pe-2">
+                Due: {{todo.dueDate | date:'medium'}}
+              </span>
+              <span>
+                Priority:
+                <span
+                  class="badge rounded-pill"
+                  [ngClass]="{
                   'bg-danger': todo.priority === 'High',
                   'bg-success': todo.priority === 'Medium',
                   'bg-primary': todo.priority === 'Low'
                 }"
-              disabled
-            >
+                  disabled
+                >
                 {{ todo.priority }}
             </span>
+              </span>
+
             </small>
           </div>
         </div>
@@ -39,7 +46,6 @@
       </div>
     }
   </div>
-  }
   <button matFab class="text-bg-primary add-button" (click)="openAddBottomSheet()">
     <mat-icon>add</mat-icon>
   </button>
